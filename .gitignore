@@ -1,0 +1,6 @@
+.vs
+**/bin
+**/obj
+**/PublishProfiles
+SiteAnalysisCS/SiteAnalysisCS.csproj.user
+/HtmlLoader.csproj.user

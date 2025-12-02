@@ -1,0 +1,22 @@
+﻿<Window x:Class="HtmlLoader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HtmlLoader"
+        mc:Ignorable="d"
+        Title="HTML Loader" Height="450" Width="1000" WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="10">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+            <Label Margin="5">URL:</Label>
+            <TextBox x:Name="URLTextBox" Margin="5" Width="200" Height="20" TextChanged="URLTextBoxChanged"/>
+            <Button x:Name="LoadButton" Height="20" Content="Load HTML" Click="LoadButton_Click" IsEnabled="False"/>
+            <Label Margin="5">File name:</Label>
+            <TextBox x:Name="FileNameTextBox" Margin="5" Width="200" Height="20" TextChanged="FileNameTextBoxChanged"/>
+            <Button x:Name="SaveButton" Height="20" Content="SaveHTML" Click="SaveButton_Click" IsEnabled="False"/>
+        </StackPanel>
+        <ScrollViewer DockPanel.Dock="Bottom" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10">
+            <TextBox x:Name="HtmlTextBox"/>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
