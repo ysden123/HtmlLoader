@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HtmlLoader"
         mc:Ignorable="d"
-        Title="HTML Loader" Height="450" Width="1000" WindowStartupLocation="CenterScreen">
+        Title="HTML Loader" Height="450" Width="1000" WindowStartupLocation="CenterScreen" Closed="OnMainWindowClosed">
     <DockPanel Margin="10">
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
             <Label Margin="5">URL:</Label>

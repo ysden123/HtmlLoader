@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
+using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 
 namespace HtmlLoader
@@ -22,33 +24,37 @@ namespace HtmlLoader
                 string version = fvi.FileVersion;
                 Title = $"{Title} {version}";
             }
+
+            try
+            {
+                LastValues? lastValues = JsonSerializer.Deserialize<LastValues>(File.ReadAllText("LastValues.json"));
+                if (lastValues != null)
+                {
+                    URLTextBox.Text = lastValues.Url;
+                    FileNameTextBox.Text = lastValues.Filename;
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
 
-        private async void LoadButton_Click(object sender, RoutedEventArgs e)
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
             string theUrl = URLTextBox.Text;
-            await Task.Run(async () =>
+
+            try
             {
-                //var htmlWeb = new HtmlWeb();
-                try
+                htmlDocument = htmlWeb.Load(theUrl);
+                if (htmlDocument != null)
                 {
-                    htmlDocument = await htmlWeb.LoadFromWebAsync(theUrl);
-                    if (htmlDocument != null)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            HtmlTextBox.Text = htmlDocument.DocumentNode.OuterHtml;
-                        });
-                    }
+                    HtmlTextBox.Text = htmlDocument.DocumentNode.OuterHtml;
                 }
-                catch (Exception ex)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        MessageBox.Show($"Error loading HTML: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    });
-                }
-            });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading HTML: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -80,6 +86,26 @@ namespace HtmlLoader
         private void FileNameTextBoxChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             SaveButton.IsEnabled = !string.IsNullOrWhiteSpace(FileNameTextBox.Text);
+        }
+
+        private void OnMainWindowClosed(object sender, EventArgs e)
+        {
+            LastValues lastValues = new()
+            {
+                Url = URLTextBox.Text,
+                Filename = FileNameTextBox.Text
+            };
+
+            try
+            {
+                File.WriteAllText("LastValues.json", JsonSerializer.Serialize(lastValues));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving last values: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            Close();
         }
     }
 }
